@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "食策AI Mini V1 Benchmark Seed",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "category_code", "region_level", "region_code", "metric_code",
+      "low_value", "mid_value", "high_value", "unit",
+      "source_name", "source_url", "source_date", "confidence_level",
+      "review_status", "valid_from"
+    ],
+    "properties": {
+      "category_code": {"type": "string"},
+      "region_level": {"enum": ["CITY", "PROVINCE", "REGION", "COUNTRY"]},
+      "region_code": {"type": "string"},
+      "metric_code": {"type": "string"},
+      "low_value": {"type": "string"},
+      "mid_value": {"type": ["string", "null"]},
+      "high_value": {"type": "string"},
+      "unit": {"type": "string"},
+      "source_name": {"type": "string", "minLength": 1},
+      "source_url": {"type": "string", "pattern": "^https?://"},
+      "source_date": {"type": "string", "format": "date"},
+      "confidence_level": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+      "review_status": {"const": "APPROVED"},
+      "valid_from": {"type": "string", "format": "date"},
+      "valid_to": {"type": ["string", "null"], "format": "date"}
+    }
+  }
+}
