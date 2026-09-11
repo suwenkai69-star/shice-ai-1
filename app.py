@@ -25,6 +25,7 @@ from data_foundation import (
 BASE = pathlib.Path(__file__).resolve().parent
 DB_PATH = BASE / 'data' / 'shice_ai.db'
 STATIC = BASE / 'static'
+WEB = BASE / 'web'
 
 
 def _production_environment() -> bool:
@@ -33,7 +34,14 @@ def _production_environment() -> bool:
 
 
 def production_route_allowed(path: str) -> bool:
-    return path == "/api/health" or path.startswith("/api/mini/v1/") or path == "/api/mini/v1"
+    return (
+        path == "/"
+        or path == "/web"
+        or path.startswith("/web/")
+        or path == "/api/health"
+        or path.startswith("/api/mini/v1/")
+        or path == "/api/mini/v1"
+    )
 
 DEFAULT_SETTINGS = {
     'storeName':'永民手作','storeType':'奶茶店','period':'2026年6月',
@@ -288,7 +296,7 @@ def marketing_generate(state, product_name, goal, channel):
 def startup(): init_runtime()
 
 @app.get('/')
-def root(): return FileResponse(STATIC/'index.html')
+def root(): return FileResponse(WEB/'index.html')
 
 @app.get('/api/health')
 def health():
@@ -459,6 +467,8 @@ def restore(payload: dict[str, Any]):
     except Exception as exc:
         raise HTTPException(400, str(exc))
     return {'state': get_state(), 'restored': True}
+
+app.mount('/web', StaticFiles(directory=WEB), name='web')
 
 if not _production_environment():
     app.mount('/static', StaticFiles(directory=STATIC), name='static')

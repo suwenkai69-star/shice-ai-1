@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f5f6f2" />
+  <title>食策AI｜门店经营陪跑助手</title>
+  <link rel="stylesheet" href="/web/styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <main id="loginView" class="auth-shell">
+    <section class="auth-card">
+      <div class="brand-mark">食</div>
+      <p class="eyebrow">SHICE AI</p>
+      <h1>食策AI</h1>
+      <p class="auth-subtitle">门店经营陪跑助手</p>
+      <p class="auth-copy">每天只告诉你三件事：今天赚没赚钱、哪里有问题、接下来该做什么。</p>
+      <form id="loginForm" class="stack gap-12">
+        <label class="field">
+          <span>测试访问密码</span>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="输入访问密码" required />
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">进入我的门店</button>
+      </form>
+      <p class="tiny muted">测试版登录。正式上线前会切换为微信/手机号登录。</p>
+    </section>
+  </main>
+
+  <main id="onboardingView" class="auth-shell hidden">
+    <section class="auth-card wide-card">
+      <p class="eyebrow">第一次使用</p>
+      <h1>先告诉我你的门店</h1>
+      <p class="auth-copy">只需要两项。后面的经营数据可以慢慢补。</p>
+      <form id="storeForm" class="stack gap-16">
+        <label class="field">
+          <span>门店名称</span>
+          <input id="storeName" maxlength="120" placeholder="例如：永民手作" required />
+        </label>
+        <label class="field">
+          <span>门店类型</span>
+          <select id="storeCategory" required>
+            <option value="MILK_TEA">奶茶饮品</option>
+            <option value="COFFEE">咖啡</option>
+            <option value="FAST_FOOD_SNACK">快餐小吃</option>
+            <option value="CHINESE_DINING">中式正餐</option>
+            <option value="HOTPOT">火锅</option>
+            <option value="BBQ">烧烤</option>
+            <option value="BAKERY_DESSERT">烘焙甜品</option>
+            <option value="BAR_LEISURE">酒吧/休闲娱乐</option>
+            <option value="OTHER_FOOD">其他餐饮</option>
+          </select>
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">建立门店并开始</button>
+      </form>
+    </section>
+  </main>
+
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark small">食</div>
+        <div><strong>食策AI</strong><span>老板版</span></div>
+      </div>
+      <nav id="sideNav" class="side-nav" aria-label="主导航">
+        <button data-page="today" class="nav-item active"><span class="nav-icon">今</span><span>今天</span></button>
+        <button data-page="upload" class="nav-item"><span class="nav-icon">传</span><span>上传</span></button>
+        <button data-page="actions" class="nav-item"><span class="nav-icon">办</span><span>待办</span></button>
+        <button data-page="data" class="nav-item"><span class="nav-icon">数</span><span>数据</span></button>
+        <button data-page="chat" class="nav-item"><span class="nav-icon">问</span><span>问食策AI</span></button>
+        <button data-page="profile" class="nav-item"><span class="nav-icon">我</span><span>我的</span></button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="store-chip"><span class="dot"></span><span id="sidebarStoreName">我的门店</span></div>
+        <button id="logoutBtn" class="text-btn">退出登录</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p id="pageEyebrow" class="eyebrow">TODAY</p>
+          <h2 id="pageTitle">今天</h2>
+        </div>
+        <div class="topbar-actions">
+          <span id="todayDate" class="date-pill"></span>
+          <button id="refreshBtn" class="icon-btn" title="刷新">↻</button>
+        </div>
+      </header>
+
+      <div id="pageContent" class="content"></div>
+    </section>
+
+    <nav id="mobileNav" class="mobile-nav" aria-label="移动端主导航">
+      <button data-page="today" class="active"><span>今</span><small>今天</small></button>
+      <button data-page="upload"><span>传</span><small>上传</small></button>
+      <button data-page="actions"><span>办</span><small>待办</small></button>
+      <button data-page="data"><span>数</span><small>数据</small></button>
+      <button data-page="profile"><span>我</span><small>我的</small></button>
+    </nav>
+  </div>
+
+  <dialog id="uploadDialog" class="modal">
+    <div class="modal-body">
+      <div class="modal-head"><div><p class="eyebrow">上传预览</p><h3>确认这份数据</h3></div><button id="closeUploadDialog" class="icon-btn">×</button></div>
+      <div id="uploadPreview" class="preview-box"></div>
+      <div class="modal-actions">
+        <button id="rejectUploadBtn" class="btn btn-ghost">不用这份</button>
+        <button id="confirmUploadBtn" class="btn btn-primary">确认导入</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="/web/api.js"></script>
+  <script src="/web/app.js"></script>
+</body>
+</html>
