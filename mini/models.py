@@ -7,10 +7,6 @@ class WechatLoginRequest(BaseModel):
     code: str = Field(min_length=1, max_length=256)
 
 
-class WebLoginRequest(BaseModel):
-    password: str = Field(min_length=1, max_length=512)
-
-
 class StoreCreateRequest(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     category_code: str = Field(min_length=1, max_length=64)

@@ -10,21 +10,14 @@
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <main id="loginView" class="auth-shell">
+  <main id="bootView" class="auth-shell">
     <section class="auth-card">
       <div class="brand-mark">食</div>
-      <p class="eyebrow">SHICE AI</p>
+      <p class="eyebrow">SHICE AI · DEMO</p>
       <h1>食策AI</h1>
       <p class="auth-subtitle">门店经营陪跑助手</p>
-      <p class="auth-copy">每天只告诉你三件事：今天赚没赚钱、哪里有问题、接下来该做什么。</p>
-      <form id="loginForm" class="stack gap-12">
-        <label class="field">
-          <span>测试访问密码</span>
-          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="输入访问密码" required />
-        </label>
-        <button class="btn btn-primary btn-block" type="submit">进入我的门店</button>
-      </form>
-      <p class="tiny muted">测试版登录。正式上线前会切换为微信/手机号登录。</p>
+      <p class="auth-copy">正在进入演示版。无需账号或密码。</p>
+      <div class="skeleton" style="margin-top:20px;height:52px"></div>
     </section>
   </main>
 
@@ -73,7 +66,7 @@
       </nav>
       <div class="sidebar-footer">
         <div class="store-chip"><span class="dot"></span><span id="sidebarStoreName">我的门店</span></div>
-        <button id="logoutBtn" class="text-btn">退出登录</button>
+        <button id="logoutBtn" class="text-btn">重新进入演示</button>
       </div>
     </aside>
 

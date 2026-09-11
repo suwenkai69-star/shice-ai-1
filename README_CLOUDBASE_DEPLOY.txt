@@ -11,7 +11,7 @@ CloudBase：
 - SHICE_ENV=production
 - DATABASE_URL=<Neon 完整 PostgreSQL URI>
 - MINI_TOKEN_SECRET=<随机长密钥>
-- WEB_ACCESS_PASSWORD=<你设置的强测试访问密码>
+- 当前 Web 为公开演示模式，无需访问密码
 
 上线后：
 - / = 食策AI Web 老板版

@@ -22,32 +22,36 @@
   function detailMessage(err){ if(typeof err?.payload?.detail === "object") return err.payload.detail.message || JSON.stringify(err.payload.detail); return err?.message || "请求失败"; }
 
   function showView(name){
-    ["loginView","onboardingView","appView"].forEach(id=>$("#"+id).classList.add("hidden"));
+    ["bootView","onboardingView","appView"].forEach(id=>$("#"+id).classList.add("hidden"));
     $("#"+name).classList.remove("hidden");
+  }
+
+  async function startDemoSession(){
+    showView("bootView");
+    const result=await API.request("/auth/demo",{method:"POST"});
+    API.setToken(result.token); state.store=result.store || null;
+    if(result.has_store) enterApp(); else showView("onboardingView");
   }
 
   async function bootstrap(){
     $("#todayDate").textContent=dateCN();
-    if(!API.getToken()){ showView("loginView"); return; }
+    if(!API.getToken()){
+      try{ await startDemoSession(); }
+      catch(err){ toast(detailMessage(err),true); }
+      return;
+    }
     try{
       const data = await API.request("/store");
       state.store=data.store; enterApp();
     }catch(err){
       if(err.status===404){ showView("onboardingView"); }
-      else { API.clearToken(); showView("loginView"); }
+      else if(err.status===401){
+        API.clearToken();
+        try{ await startDemoSession(); } catch(e){ toast(detailMessage(e),true); }
+      } else {
+        toast(detailMessage(err),true);
+      }
     }
-  }
-
-  async function login(e){
-    e.preventDefault();
-    const btn=e.submitter; btn.disabled=true; btn.textContent="正在进入…";
-    try{
-      const result=await API.request("/auth/web",{method:"POST",body:{password:$("#loginPassword").value}});
-      API.setToken(result.token); state.store=result.store || null;
-      $("#loginPassword").value="";
-      if(result.has_store) enterApp(); else showView("onboardingView");
-    }catch(err){ toast(detailMessage(err),true); }
-    finally{ btn.disabled=false; btn.textContent="进入我的门店"; }
   }
 
   async function createStore(e){
@@ -76,7 +80,7 @@
       else if(page==="chat") renderChat();
       else if(page==="profile") await renderProfile();
     }catch(err){
-      if(err.status===401){ API.clearToken(); showView("loginView"); return; }
+      if(err.status===401){ API.clearToken(); bootstrap(); return; }
       $("#pageContent").innerHTML=errorCard(detailMessage(err));
     }
   }
@@ -230,9 +234,8 @@
   }
 
   function bindJumps(root=document){ $$('[data-jump]',root).forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.jump))); }
-  function logout(){ API.clearToken(); state.store=null; state.chat=[]; showView("loginView"); toast("已退出"); }
+  function logout(){ API.clearToken(); state.store=null; state.chat=[]; bootstrap(); toast("已重新进入演示"); }
 
-  $("#loginForm").addEventListener("submit",login);
   $("#storeForm").addEventListener("submit",createStore);
   $("#sideNav").addEventListener("click",e=>{const b=e.target.closest('[data-page]');if(b)navigate(b.dataset.page)});
   $("#mobileNav").addEventListener("click",e=>{const b=e.target.closest('[data-page]');if(b)navigate(b.dataset.page)});

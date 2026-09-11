@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-import hmac
-import os
-
 from fastapi import APIRouter, Header, HTTPException
 
 from mini import auth as auth_module
 from mini.auth import AuthError, AuthConfigurationError, TokenService
 from mini.deps import get_database
-from mini.models import StoreCreateRequest, StorePatchRequest, WebLoginRequest, WechatLoginRequest
+from mini.models import StoreCreateRequest, StorePatchRequest, WechatLoginRequest
 from repositories.mini_store_repository import MiniStoreRepository
 
 router = APIRouter()
@@ -30,15 +27,10 @@ def _user_id_from_auth(authorization: str | None) -> int:
         raise HTTPException(status_code=401, detail="登录已失效，请重新进入") from exc
 
 
-@router.post("/auth/web")
-def web_login(payload: WebLoginRequest):
-    expected = os.getenv("WEB_ACCESS_PASSWORD", "")
-    if not expected:
-        raise HTTPException(status_code=503, detail="Web 登录尚未配置")
-    if not hmac.compare_digest(payload.password, expected):
-        raise HTTPException(status_code=401, detail="访问密码错误")
+@router.post("/auth/demo")
+def demo_login():
     repo = MiniStoreRepository(get_database())
-    user = repo.create_or_get_user("web-preview-owner", None)
+    user = repo.create_or_get_user("web-demo-owner", None)
     token = _token_service().issue(int(user["user_id"]))
     store = repo.get_current_store(int(user["user_id"]))
     return {
@@ -46,6 +38,7 @@ def web_login(payload: WebLoginRequest):
         "user": {"id": int(user["user_id"])},
         "has_store": store is not None,
         "store": store,
+        "demo": True,
     }
 
 

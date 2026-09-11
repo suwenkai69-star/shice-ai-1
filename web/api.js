@@ -25,7 +25,7 @@
       const err = new Error(typeof payload?.detail === "string" ? payload.detail : (payload?.message || `请求失败（${response.status}）`));
       err.status = response.status;
       err.payload = payload;
-      if(response.status === 401 && path !== "/auth/web") clearToken();
+      if(response.status === 401 && path !== "/auth/demo") clearToken();
       throw err;
     }
     return payload;
